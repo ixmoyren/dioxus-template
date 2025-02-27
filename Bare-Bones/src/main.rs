@@ -1,5 +1,5 @@
+use dioxus::logger::tracing::{info, Level};
 use dioxus::prelude::*;
-
 {% if is_router %}
 #[derive(Debug, Clone, Routable, PartialEq)]
 #[rustfmt::skip]
@@ -11,29 +11,29 @@ enum Route {
     Blog { id: i32 },
 }
 {% endif %}
-
 const FAVICON: Asset = asset!("/assets/favicon.ico");
 const MAIN_CSS: Asset = asset!("/assets/main.css");
 const HEADER_SVG: Asset = asset!("/assets/header.svg");
-{% if is_tailwind -%}
-const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
-{%- endif %}
 
 fn main() {
+    // Init logger
+    dioxus::logger::init(Level::INFO).expect("failed to init logger");
+    info!("starting app");
     dioxus::launch(App);
 }
 
 #[component]
 fn App() -> Element {
     rsx! {
+        document::Title { "{{project-name}}" }
+        document::Meta { charset: "utf-8" }
         document::Link { rel: "icon", href: FAVICON }
-        document::Link { rel: "stylesheet", href: MAIN_CSS } {% if is_tailwind -%}
-        document::Link { rel: "stylesheet", href: TAILWIND_CSS } {%- endif %}
+        document::Link { rel: "stylesheet", href: MAIN_CSS }
         {% if is_router -%} Router::<Route> {}
         {%- else -%} 
         Hero {}
-        {% if is_fullstack -%} Echo {} {%- endif %}
-        {%- endif %} 
+        {% if is_fullstack %} Echo {} {% endif %}
+        {% endif %}
     }
 }
 
@@ -55,7 +55,7 @@ pub fn Hero() -> Element {
     }
 }
 
-{% if is_router -%}
+{% if is_router %}
 /// Home page
 #[component]
 fn Home() -> Element {
@@ -109,9 +109,9 @@ fn Navbar() -> Element {
         Outlet::<Route> {}
     }
 }
-{%- endif %}
+{% endif %}
 
-{% if is_fullstack -%}
+{% if is_fullstack %}
 /// Echo component that demonstrates fullstack server functions.
 #[component]
 fn Echo() -> Element {
@@ -144,4 +144,4 @@ fn Echo() -> Element {
 async fn echo_server(input: String) -> Result<String, ServerFnError> {
     Ok(input)
 }
-{%- endif %}
+{% endif %}

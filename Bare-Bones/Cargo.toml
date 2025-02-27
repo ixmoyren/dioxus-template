@@ -1,16 +1,27 @@
+{%- if is_tailwind -% }
+[workspace]
+resolver = "3"
+members = ["xtask"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+
+[package]
+name = "{{project-name}}"
+version = { workspace = true }
+edition = { workspace = true }
+{ %- else -% }
 [package]
 name = "{{project-name}}"
 version = "0.1.0"
-authors = ["{{authors}}"]
-edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
+edition = "2024"
+{ % endif % }
 [dependencies]
 dioxus = { {{ dioxus_dep_src }}, features = {{dioxus_dep_features}} }
 
 [features]
 default = ["{{default_platform}}"]
-{%- for feature in features %}
+{ % for feature in features %}
 {{ feature }}
-{%- endfor %}
+{ % endfor % }
