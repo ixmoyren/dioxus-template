@@ -6,9 +6,8 @@ const IS_FULLSTACK_VAR = "is_fullstack";
 
 let is_tailwind = variable::get(IS_TAILWIND_VAR);
 if !is_tailwind {
-    file::delete("tailwind.config.js");
-    file::delete("input.css");
-    file::delete("assets/tailwind.css");
+    file::delete("global.css");
+    file::delete("assets/main.css");
 }
 
 let is_router = variable::get(IS_ROUTER_VAR);

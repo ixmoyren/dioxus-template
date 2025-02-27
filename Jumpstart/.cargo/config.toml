@@ -1,0 +1,6 @@
+[unstable]
+trim-paths = true
+{% if is_tailwind % }
+[alias]
+xtask = "run -q --manifest-path ./xtask/Cargo.toml --"
+{%- endif -% }

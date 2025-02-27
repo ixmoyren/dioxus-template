@@ -29,9 +29,10 @@ enum Route {
 {%- endif %}
 
 const FAVICON: Asset = asset!("/assets/favicon.ico");
+{%- if is_tailwind -%}
+const MAIN_CSS: Asset = asset!("/assets/main.css");
+{%- else -%}
 const MAIN_CSS: Asset = asset!("/assets/styling/main.css");
-{% if is_tailwind -%}
-const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 {%- endif %}
 
 fn main() {
@@ -46,9 +47,6 @@ fn App() -> Element {
         // Global app resources
         document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
-        {% if is_tailwind -%}
-        document::Link { rel: "stylesheet", href: TAILWIND_CSS }
-        {%- endif %}
 
         {% if is_router -%}
         Router::<Route> {}
